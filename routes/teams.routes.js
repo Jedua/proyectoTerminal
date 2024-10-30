@@ -1,12 +1,8 @@
-// routes/teams.routes.js
 const express = require('express');
 const router = express.Router();
+const teamController = require('../controllers/teamController.controller');
 
-// Importar controlador de equipos
-const teamController = require('../controllers/teamController');
-
-// Definir rutas para los equipos
-router.get('/', teamController.getTeams);
-router.post('/', teamController.createTeam);
+// Registrar el endpoint para obtener categorías
+router.get('/equipos', teamController.getEquipos);
 
 module.exports = router;
