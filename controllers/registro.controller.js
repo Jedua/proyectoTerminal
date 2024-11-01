@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const registroModel = require('../models/registro.model');
 
 // Controlador para registrar un nuevo usuario
@@ -15,7 +16,11 @@ exports.registrarUsuario = async (req, res) => {
   } = req.body;
 
   try {
-    // Insertar en la tabla `usuario`
+    // Encriptar la contraseña antes de guardar en la base de datos
+    const salt = await bcrypt.genSalt(10);  // Genera un "salt" para la encriptación
+    const hashedPassword = await bcrypt.hash(pass, salt);  // Encripta la contraseña
+
+    // Insertar en la tabla `usuario` con la contraseña encriptada
     const result = await registroModel.insertarUsuario({
       nombre,
       apellidos,
@@ -25,7 +30,7 @@ exports.registrarUsuario = async (req, res) => {
       fecha_nacimiento,
       sexo,
       usuario,
-      pass
+      pass: hashedPassword  // Guarda la contraseña encriptada
     });
 
     // Obtener el ID del usuario recién creado
